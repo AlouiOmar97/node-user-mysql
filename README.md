@@ -80,7 +80,7 @@ Les **tables seront créées automatiquement** au premier démarrage de l'applic
 ## 📦 Cloner le projet
 
 ```bash
-git clone https://github.com/AlouiOmar/node-user-mysql.git
+git clone https://github.com/AlouiOmar97/node-user-mysql.git
 cd node-user-mysql
 ```
 
