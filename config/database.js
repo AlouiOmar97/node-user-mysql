@@ -82,6 +82,19 @@ const initDatabase = async () => {
         INDEX idx_created_at_tag (created_at)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     `);
+
+    // Créer la table jardins si elle n'existe pas
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS jardins (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        adresse VARCHAR(255) NOT NULL,
+        surface DECIMAL(10,2) NOT NULL,
+        dateEntretien DATE NULL,
+        statut TINYINT(1) DEFAULT 1,
+        INDEX idx_statut_jardin (statut),
+        INDEX idx_date_entretien (dateEntretien)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    `);
     connection.release();
     console.log("✅ Base de données MySQL initialisée");
   } catch (err) {

@@ -6,6 +6,7 @@ const suggestionRoutes = require("./routes/suggestionRoutes");
 const userRoutes = require("./routes/userRoutes");
 const commentRoutes = require("./routes/commentRoutes");
 const tagRoutes = require("./routes/tagRoutes");
+const jardinRoutes = require("./routes/jardinRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -28,6 +29,7 @@ app.use("/suggestions", suggestionRoutes);
 app.use("/users", userRoutes);
 app.use("/comments", commentRoutes);
 app.use("/tags", tagRoutes);
+app.use("/jardins", jardinRoutes);
 
 // Gestion des erreurs 404
 app.use((req, res) => {

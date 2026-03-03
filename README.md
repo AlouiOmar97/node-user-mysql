@@ -1,6 +1,6 @@
 # API
 
-API REST construite avec Express.js, MySQL et architecture MVC pour gérer des suggestions, des utilisateurs, des commentaires et des tags.
+API REST construite avec Express.js, MySQL et architecture MVC pour gérer des suggestions, des utilisateurs, des commentaires, des tags et des jardins.
 
 ## 📋 Table des matières
 
@@ -14,6 +14,7 @@ API REST construite avec Express.js, MySQL et architecture MVC pour gérer des s
   - [Utilisateurs](#utilisateurs)
   - [Commentaires](#commentaires)
   - [Tags](#tags)
+  - [Jardins](#jardins)
 - [Exemples de requêtes](#exemples-de-requêtes)
 - [Gestion des erreurs](#gestion-des-erreurs)
 
@@ -75,6 +76,13 @@ Les **tables seront créées automatiquement** au premier démarrage de l'applic
 - `color` (VARCHAR(20))
 - `status` (VARCHAR(50), DEFAULT 'active')
 - `created_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+
+#### Table `jardins`
+- `id` (INT, AUTO_INCREMENT, PRIMARY KEY)
+- `adresse` (VARCHAR(255), NOT NULL)
+- `surface` (DECIMAL(10,2), NOT NULL)
+- `dateEntretien` (DATE, NULL)
+- `statut` (TINYINT(1), DEFAULT 1) — 1 = actif, 0 = inactif
 
 
 ## 📦 Cloner le projet
@@ -706,6 +714,141 @@ Supprime un tag.
 {
   "success": true,
   "message": "Tag supprimé avec succès"
+}
+```
+
+---
+
+### Jardins
+
+#### GET `/jardins`
+Récupère tous les jardins.
+
+**Réponse :**
+```json
+[
+  {
+    "id": 1,
+    "adresse": "10 rue des Fleurs, Paris",
+    "surface": 120.5,
+    "dateEntretien": "2024-03-01",
+    "statut": 1
+  }
+]
+```
+
+#### GET `/jardins/:id`
+Récupère un jardin par son ID.
+
+**Paramètres :**
+- `id` (number) - ID du jardin
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "jardin": {
+    "id": 1,
+    "adresse": "10 rue des Fleurs, Paris",
+    "surface": 120.5,
+    "dateEntretien": "2024-03-01",
+    "statut": 1
+  }
+}
+```
+
+#### POST `/jardins`
+Crée un nouveau jardin.
+
+**Body (JSON) :**
+```json
+{
+  "adresse": "10 rue des Fleurs, Paris",
+  "surface": 120.5,
+  "dateEntretien": "2024-03-01",
+  "statut": true
+}
+```
+
+**Champs requis :**
+- `adresse` (string) - Adresse du jardin
+- `surface` (number) - Surface du jardin
+
+**Champs optionnels :**
+- `dateEntretien` (string, format `YYYY-MM-DD`) - Date du dernier entretien
+- `statut` (boolean) - Statut du jardin (`true` = actif, `false` = inactif, défaut: `true`)
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "message": "Jardin créé avec succès",
+  "id": 1
+}
+```
+
+#### PUT `/jardins/:id`
+Met à jour un jardin existant.
+
+**Paramètres :**
+- `id` (number) - ID du jardin
+
+**Body (JSON) :**
+```json
+{
+  "adresse": "20 avenue des Jardins, Lyon",
+  "surface": 150,
+  "dateEntretien": "2024-04-10",
+  "statut": false
+}
+```
+
+**Champs requis :**
+- `adresse` (string)
+- `surface` (number)
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "message": "Jardin mis à jour avec succès"
+}
+```
+
+#### DELETE `/jardins/:id`
+Supprime un jardin.
+
+**Paramètres :**
+- `id` (number) - ID du jardin
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "message": "Jardin supprimé avec succès"
+}
+```
+
+#### GET `/jardins/statut/:statut`
+Récupère les jardins par statut.
+
+**Paramètres :**
+- `statut` (string) - `true` ou `false` (ou `1` / `0`)
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "count": 2,
+  "jardins": [
+    {
+      "id": 1,
+      "adresse": "10 rue des Fleurs, Paris",
+      "surface": 120.5,
+      "dateEntretien": "2024-03-01",
+      "statut": 1
+    }
+  ]
 }
 ```
 
