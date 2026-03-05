@@ -1,6 +1,6 @@
 # API
 
-API REST construite avec Express.js, MySQL et architecture MVC pour gérer des suggestions, des utilisateurs, des commentaires, des tags et des jardins.
+API REST construite avec Express.js, MySQL et architecture MVC pour gérer des suggestions, des utilisateurs, des commentaires, des tags, des jardins et des ateliers.
 
 ## 📋 Table des matières
 
@@ -15,6 +15,7 @@ API REST construite avec Express.js, MySQL et architecture MVC pour gérer des s
   - [Commentaires](#commentaires)
   - [Tags](#tags)
   - [Jardins](#jardins)
+  - [Ateliers](#ateliers)
 - [Exemples de requêtes](#exemples-de-requêtes)
 - [Gestion des erreurs](#gestion-des-erreurs)
 
@@ -82,6 +83,13 @@ Les **tables seront créées automatiquement** au premier démarrage de l'applic
 - `adresse` (VARCHAR(255), NOT NULL)
 - `surface` (DECIMAL(10,2), NOT NULL)
 - `dateEntretien` (DATE, NULL)
+- `statut` (TINYINT(1), DEFAULT 1) — 1 = actif, 0 = inactif
+
+#### Table `ateliers`
+- `id` (INT, AUTO_INCREMENT, PRIMARY KEY)
+- `nom` (VARCHAR(255), NOT NULL)
+- `emailFormateur` (VARCHAR(255), NULL)
+- `nbrParticipant` (INT, NOT NULL)
 - `statut` (TINYINT(1), DEFAULT 1) — 1 = actif, 0 = inactif
 
 
@@ -846,6 +854,141 @@ Récupère les jardins par statut.
       "adresse": "10 rue des Fleurs, Paris",
       "surface": 120.5,
       "dateEntretien": "2024-03-01",
+      "statut": 1
+    }
+  ]
+}
+```
+
+---
+
+### Ateliers
+
+#### GET `/ateliers`
+Récupère tous les ateliers.
+
+**Réponse :**
+```json
+[
+  {
+    "id": 1,
+    "nom": "Atelier JavaScript",
+    "emailFormateur": "formateur@example.com",
+    "nbrParticipant": 20,
+    "statut": 1
+  }
+]
+```
+
+#### GET `/ateliers/:id`
+Récupère un atelier par son ID.
+
+**Paramètres :**
+- `id` (number) - ID de l'atelier
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "atelier": {
+    "id": 1,
+    "nom": "Atelier JavaScript",
+    "emailFormateur": "formateur@example.com",
+    "nbrParticipant": 20,
+    "statut": 1
+  }
+}
+```
+
+#### POST `/ateliers`
+Crée un nouvel atelier.
+
+**Body (JSON) :**
+```json
+{
+  "nom": "Atelier JavaScript",
+  "emailFormateur": "formateur@example.com",
+  "nbrParticipant": 20,
+  "statut": true
+}
+```
+
+**Champs requis :**
+- `nom` (string) - Nom de l'atelier
+- `nbrParticipant` (number) - Nombre de participants
+
+**Champs optionnels :**
+- `emailFormateur` (string) - Email du formateur
+- `statut` (boolean) - Statut de l'atelier (`true` = actif, `false` = inactif, défaut: `true`)
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "message": "Atelier créé avec succès",
+  "id": 1
+}
+```
+
+#### PUT `/ateliers/:id`
+Met à jour un atelier existant.
+
+**Paramètres :**
+- `id` (number) - ID de l'atelier
+
+**Body (JSON) :**
+```json
+{
+  "nom": "Atelier Node.js",
+  "emailFormateur": "new-formateur@example.com",
+  "nbrParticipant": 25,
+  "statut": false
+}
+```
+
+**Champs requis :**
+- `nom` (string)
+- `nbrParticipant` (number)
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "message": "Atelier mis à jour avec succès"
+}
+```
+
+#### DELETE `/ateliers/:id`
+Supprime un atelier.
+
+**Paramètres :**
+- `id` (number) - ID de l'atelier
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "message": "Atelier supprimé avec succès"
+}
+```
+
+#### GET `/ateliers/statut/:statut`
+Récupère les ateliers par statut.
+
+**Paramètres :**
+- `statut` (string) - `true` ou `false` (ou `1` / `0`)
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "count": 2,
+  "ateliers": [
+    {
+      "id": 1,
+      "nom": "Atelier JavaScript",
+      "emailFormateur": "formateur@example.com",
+      "nbrParticipant": 20,
       "statut": 1
     }
   ]

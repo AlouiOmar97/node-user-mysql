@@ -95,6 +95,18 @@ const initDatabase = async () => {
         INDEX idx_date_entretien (dateEntretien)
       ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
     `);
+
+    // Créer la table ateliers si elle n'existe pas
+    await connection.query(`
+      CREATE TABLE IF NOT EXISTS ateliers (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nom VARCHAR(255) NOT NULL,
+        emailFormateur VARCHAR(255),
+        nbrParticipant INT NOT NULL,
+        statut TINYINT(1) DEFAULT 1,
+        INDEX idx_statut_atelier (statut)
+      ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci
+    `);
     connection.release();
     console.log("✅ Base de données MySQL initialisée");
   } catch (err) {
