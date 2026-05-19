@@ -16,6 +16,7 @@ API REST construite avec Express.js, MySQL et architecture MVC pour gérer des s
   - [Tags](#tags)
   - [Jardins](#jardins)
   - [Ateliers](#ateliers)
+  - [Produits](#produits)
 - [Exemples de requêtes](#exemples-de-requêtes)
 - [Gestion des erreurs](#gestion-des-erreurs)
 
@@ -91,6 +92,18 @@ Les **tables seront créées automatiquement** au premier démarrage de l'applic
 - `emailFormateur` (VARCHAR(255), NULL)
 - `nbrParticipant` (INT, NOT NULL)
 - `statut` (TINYINT(1), DEFAULT 1) — 1 = actif, 0 = inactif
+
+#### Table `products`
+- `id` (INT, AUTO_INCREMENT, PRIMARY KEY)
+- `name` (VARCHAR(255), NOT NULL)
+- `description` (TEXT)
+- `price` (DECIMAL(10,2), NOT NULL)
+- `stock` (INT, DEFAULT 0)
+- `category` (VARCHAR(100))
+- `imageUrl` (VARCHAR(500))
+- `available` (TINYINT(1), DEFAULT 1) — 1 = disponible, 0 = indisponible
+- `created_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP)
+- `updated_at` (TIMESTAMP, DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP)
 
 
 ## 📦 Cloner le projet
@@ -994,6 +1007,183 @@ Récupère les ateliers par statut.
   ]
 }
 ```
+
+---
+
+### Produits
+
+#### GET `/products`
+Récupère tous les produits.
+
+**Réponse :**
+```json
+[
+  {
+    "id": 1,
+    "name": "Laptop Pro",
+    "description": "Ordinateur portable haute performance",
+    "price": 1299.99,
+    "stock": 50,
+    "category": "electronics",
+    "imageUrl": "https://example.com/laptop.jpg",
+    "available": 1,
+    "created_at": "2024-01-15T10:30:00.000Z",
+    "updated_at": "2024-01-15T10:30:00.000Z"
+  }
+]
+```
+
+#### GET `/products/:id`
+Récupère un produit par son ID.
+
+**Paramètres :**
+- `id` (number) - ID du produit
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "product": {
+    "id": 1,
+    "name": "Laptop Pro",
+    "description": "Ordinateur portable haute performance",
+    "price": 1299.99,
+    "stock": 50,
+    "category": "electronics",
+    "imageUrl": "https://example.com/laptop.jpg",
+    "available": 1,
+    "created_at": "2024-01-15T10:30:00.000Z",
+    "updated_at": "2024-01-15T10:30:00.000Z"
+  }
+}
+```
+
+#### POST `/products`
+Crée un nouveau produit.
+
+**Body (JSON) :**
+```json
+{
+  "name": "Laptop Pro",
+  "description": "Ordinateur portable haute performance",
+  "price": 1299.99,
+  "stock": 50,
+  "category": "electronics",
+  "imageUrl": "https://example.com/laptop.jpg",
+  "available": true
+}
+```
+
+**Champs requis :**
+- `name` (string) - Nom du produit
+- `price` (number) - Prix du produit (≥ 0)
+
+**Champs optionnels :**
+- `description` (string) - Description du produit
+- `stock` (number) - Quantité en stock (défaut: 0)
+- `category` (string) - Catégorie du produit
+- `imageUrl` (string) - URL de l'image
+- `available` (boolean) - Disponibilité (défaut: `true`)
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "message": "Produit créé avec succès",
+  "id": 1
+}
+```
+
+#### PUT `/products/:id`
+Met à jour un produit existant.
+
+**Paramètres :**
+- `id` (number) - ID du produit
+
+**Body (JSON) :**
+```json
+{
+  "name": "Laptop Pro Max",
+  "description": "Nouvelle description",
+  "price": 1499.99,
+  "stock": 30,
+  "category": "electronics",
+  "imageUrl": "https://example.com/laptop-max.jpg",
+  "available": true
+}
+```
+
+**Champs requis :**
+- `name` (string)
+- `price` (number)
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "message": "Produit mis à jour avec succès"
+}
+```
+
+#### DELETE `/products/:id`
+Supprime un produit.
+
+**Paramètres :**
+- `id` (number) - ID du produit
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "message": "Produit supprimé avec succès"
+}
+```
+
+#### GET `/products/category/:category`
+Récupère les produits par catégorie.
+
+**Paramètres :**
+- `category` (string) - Catégorie à filtrer
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "count": 3,
+  "products": [
+    {
+      "id": 1,
+      "name": "Laptop Pro",
+      "category": "electronics",
+      ...
+    }
+  ]
+}
+```
+
+#### GET `/products/available/:available`
+Récupère les produits par disponibilité.
+
+**Paramètres :**
+- `available` (string) - `true` ou `false` (ou `1` / `0`)
+
+**Réponse :**
+```json
+{
+  "success": true,
+  "count": 5,
+  "products": [
+    {
+      "id": 1,
+      "name": "Laptop Pro",
+      "available": 1,
+      ...
+    }
+  ]
+}
+```
+
+---
 
 ## 💡 Exemples de requêtes
 

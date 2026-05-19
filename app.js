@@ -8,6 +8,7 @@ const commentRoutes = require("./routes/commentRoutes");
 const tagRoutes = require("./routes/tagRoutes");
 const jardinRoutes = require("./routes/jardinRoutes");
 const atelierRoutes = require("./routes/atelierRoutes");
+const productRoutes = require("./routes/productRoutes");
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -32,6 +33,7 @@ app.use("/comments", commentRoutes);
 app.use("/tags", tagRoutes);
 app.use("/jardins", jardinRoutes);
 app.use("/ateliers", atelierRoutes);
+app.use("/products", productRoutes);
 
 // Gestion des erreurs 404
 app.use((req, res) => {
